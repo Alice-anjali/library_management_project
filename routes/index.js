@@ -4,7 +4,7 @@ var path = require('path');
 
 /* GET login page. */
 router.get('/', function(req, res, next) {
-  res.sendFile(path.resolve(__dirname + '/../public/login.html'));
+  res.sendFile(path.resolve(__dirname + '/../public/index.html'));
 });
 
 module.exports = router;

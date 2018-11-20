@@ -11,23 +11,26 @@ var app = express();
 // });
 
 router.post('/login', function(req, res, next) {
-  Admin.findOne({ where: {username: req.body.username, password: req.body.password} }).then(project => {
-    console.log("Hie admin");
+  Admin.findOne({ where: {username: req.body.username1, password: req.body.password} }).then(function(user) {
+    console.log(user);
+    if(user){
+      console.log("Hie admin");
+      req.session.admin = 'library@place';
+      res.render('dashboard',{user: req.body.username1});
+    }
+    else{
+      User.findOne({ where: {username: req.body.username1, password: req.body.password} }).then(function(user) {
+        console.log(user);
+        if(user){
+          console.log("Hie user");
+        }
+        else{
+          res.redirect('/');
+        }
+      })
+    }
   })
-  // Admin.findOne({admin : req.body.username, password : req.body.password},function(err,admin){
-  //   if (err){
-  //     res.redirect('/logout');
-  //   }
-  //   else{
-  //     if(admin){
-  //       req.session.admin = 'library@svnit';
-  //        res.redirect('/dashboard');
-  //     }
-  //     else{
-  //       res.redirect('/');
-  //     }
-  //   }
-  // })
+
 });
 
 router.post('/signup', function(req, res, next){
@@ -58,8 +61,12 @@ router.post('/signup', function(req, res, next){
     res.status(201).send("Passwords do not match!")
   }
 
-  // res.redirect('/');
 
+});
+
+router.get('/logout', function(req,res,next){
+  req.session.admin = null;
+  res.redirect('/');
 });
 
 module.exports = router;

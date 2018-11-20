@@ -6,7 +6,9 @@ var logger = require('morgan');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-var models = require('./models');
+var models = require('./models')
+// var Admin = require('./models/admin');
+const Admin = require('./models').Admin;
 
 var app = express();
 
@@ -22,6 +24,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+
+Admin
+  .findOrCreate({where: {username: 'admin'}, defaults: {password: '123'}})
+  .spread((user, created) => {
+    console.log(user.get({
+      plain: true
+    }))
+    console.log(created)
+  })
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

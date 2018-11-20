@@ -5,17 +5,13 @@ var Admin = require('../models').Admin;
 var User = require('../models').User;
 var app = express();
 
-/* GET users listing. */
-// router.get('/', function(req, res, next) {
-//   res.send('respond with a resource');
-// });
 
 router.post('/login', function(req, res, next) {
   Admin.findOne({ where: {username: req.body.username1, password: req.body.password} }).then(function(user) {
     console.log(user);
     if(user){
       console.log("Hie admin");
-      req.session.admin = 'library@place';
+      req.session.user = 'library@place';
       res.render('dashboard',{user: req.body.username1});
     }
     else{
@@ -23,6 +19,8 @@ router.post('/login', function(req, res, next) {
         console.log(user);
         if(user){
           console.log("Hie user");
+          req.session.user = 'library@place';
+          res.render('user',{user: req.body.username1});
         }
         else{
           res.redirect('/');
@@ -65,7 +63,7 @@ router.post('/signup', function(req, res, next){
 });
 
 router.get('/logout', function(req,res,next){
-  req.session.admin = null;
+  req.session.user = null;
   res.redirect('/');
 });
 

@@ -52,7 +52,8 @@
               <td><%= due_books[i].issue_date %></td>
               <td><%= due_books[i].return_date %></td>
               <td><%= due_books[i].availability %></td>
-              
+              <td><button id="add_btn" onclick="editme('<%=due_books[i].book_id%>','<%=due_books[i].book_name%>','<%=due_books[i].authors%>','<%=due_books[i].edition%>','<%=due_books[i].publisher%>','<%=due_books[i].category%>','<%=due_books[i].issuer%>','<%=due_books[i].issue_date%>','<%=due_books[i].return_date%>','<%=due_books[i].library_input_date%>','<%=due_books[i].availability%>')" class="btn btn-info" data-toggle="modal" data-target="#editIssue">Edit</button></td>
+              <td><button id="return_btn" onclick="returnme('<%=due_books[i].issuer%>','<%=due_books[i].book_id%>')" class="btn btn-success" data-toggle="modal" data-target="#returnIssue">Return</button></td>
             </tr>
             <% } %>
           </tbody>
@@ -192,6 +193,92 @@
         </div>
       </div>
 
+      <!-- Edit Issue Modal -->
+      <div id="editIssue" class="modal fade">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title"><b>Edit Issue</b></h4>
+            </div>
+            <div class="modal-body">
+              <form action="/editbook" method="post">
+                <table width="100%">
+                  <tr>
+                    <td style="float:right">Book ID:</td>
+                    <td><input type="text" name="book_id1" id="book_id1"></td>
+                    <td style="float:right">Book Name:</td>
+                    <td><input type="text" name="book_name1" id="book_name1"></td>
+                  </tr>
+                  <tr>
+                    <td><font color="#ffffff">""</font></td>
+                  </tr>
+                  <tr>
+                    <td style="float:right">Authors:</td>
+                    <td><input type="text" name="authors1" id="authors1"></td>
+                    <td style="float:right">Edition:</td>
+                    <td><input type="text" name="edition1" id="edition1"></td>
+                  </tr>
+                  <tr>
+                    <td><font color="#ffffff">""</font></td>
+                  </tr>
+                  <tr>
+                    <td style="float:right">Publisher:</td>
+                    <td><input type="text" name="publisher1" id="publisher1"></td>
+                    <td style="float:right">Category:</td>
+                    <td><label>
+                          <select name="category1" id="category1">
+                            <option selected>--Select--</option>
+                            <option>ADBMS</option>
+                            <option>ICS</option>
+                            <option>DC</option>
+                            <option>ACC</option>
+                          </select>
+                        </label>
+                      </td>
+                  </tr>
+                  <tr>
+                    <td><font color="#ffffff">""</font></td>
+                  </tr>
+                  <tr>
+                    <td style="float:right">Issuer:</td>
+                    <td><input type="text" name="issuer1" id="issuer1"></td>
+                    <td style="float:right">Library Entry Date:</td>
+                    <td><input type="date" id="library_input_date1" name="library_input_date1"></td>
+                  </tr>
+                  <tr>
+                    <td><font color="#ffffff">""</font></td>
+                  </tr>
+                  <tr>
+                    <td style="float:right">Issue Date:</td>
+                    <td><input type="date" id="issue_date1" name="issue_date1"></td>
+                    <td style="float:right">Return Date:</td>
+                    <td><input type="date" id="return_date1" name="return_date1"></td>
+                  </tr>
+                  <tr>
+                    <td><font color="#ffffff">""</font></td>
+                  </tr>
+                  <tr>
+                    <td style="float:right">Availability:</td>
+                    <td><label>
+                          <select name="availability1" id="availability1">
+                            <option selected>--Select--</option>
+                            <option>true</option>
+                            <option>false</option>
+                          </select>
+                        </label></td>
+                    <td><input type="hidden" id="hidden_date1" name="hidden_date1"></td>
+                  </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </form>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
    </div>
   </body>
   <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
@@ -208,15 +295,39 @@
     });
 
     $('#newIssue').modal('show');
+    $('#editIssue').modal('show');
 
     function addme(){
       var d = new Date();
       var n = d.toISOString();
       var idate = n.substring(0,10);
-      // console.log("date = "+ new Date(idate));
       document.getElementById('issue_date').value = idate;
       document.getElementById('return_date').value = idate;
       document.getElementById('hidden_date').value = d;
+    }
+
+    function editme(bookid,bookname,authors,edition,publisher,category,issuer,issuedate,returndate,libraryinputdate,availability){
+      console.log("issuer= "+issuer);
+      document.getElementById('book_id1').value = bookid;
+      document.getElementById('book_name1').value = bookname;
+      document.getElementById('authors1').value = authors;
+      document.getElementById('edition1').value = edition;
+      document.getElementById('publisher1').value = publisher;
+      document.getElementById('category1').value = category;
+      document.getElementById('issuer1').value = issuer;
+      var d = new Date(issuedate);
+      var n = d.toISOString();
+      var edate = n.substring(0,10);
+      document.getElementById('issue_date1').value = edate;
+      var k = new Date(returndate);
+      var l = k.toISOString();
+      var rdate = l.substring(0,10);
+      document.getElementById('return_date1').value = rdate;
+      var p = new Date(libraryinputdate);
+      var q = p.toISOString();
+      var lidate = q.substring(0,10);
+      document.getElementById('library_input_date1').value = lidate;
+      document.getElementById('availability1').value = availability;
     }
 
   </script>

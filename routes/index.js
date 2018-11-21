@@ -4,6 +4,7 @@ var path = require('path');
 var Admin = require('../models').Admin;
 var User = require('../models').User;
 var Books = require('../models').Books;
+var Issue = require('../models').Issue;
 var app = express();
 
 /* GET login page. */
@@ -57,8 +58,18 @@ router.post('/additem', loggedincheck, function(req,res,next){
     return_date: req.body.return_date,
     availability: req.body.availability
    }).then(task => {
-     res.redirect('/home');
+     Issue.create({
+       book_id: req.body.book_id,
+       issuer: req.body.issuer,
+       issue_date: req.body.hidden_date,
+       return_date: req.body.return_date,
+       availability: req.body.availability
+     }).then(data => {
+       res.redirect('/home');
+     }).catch((error) => res.status(400).send(error))
+
    }).catch((error) => res.status(400).send(error))
+
 
 });
 

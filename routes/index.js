@@ -35,7 +35,11 @@ router.get('/home', loggedincheck, function(req,res,next){
 });
 
 router.get('/books', loggedincheck, function(req,res,next){
-  res.render('booklist',{});
+    Books.findAll({}).then(function(booklist) {
+        Issue.findAll({}).then(function(issuelist) {
+            res.render('booklist', {booklist : booklist, issuelist : issuelist});
+        })
+      })
 });
 
 router.get('/user_home', loggedincheck, function(req,res,next){
@@ -70,6 +74,84 @@ router.post('/additem', loggedincheck, function(req,res,next){
 
    }).catch((error) => res.status(400).send(error))
 
+});
+
+router.post('/editbook', loggedincheck, function(req,res,next){
+  Books.findOne({ where: { book_id: req.body.book_id1 } })
+  .then(function(data) {
+    if(typeof(req.body.authors1 == "string")){
+      var authors_string = req.body.authors1;
+      var authors_array = authors_string.split(",");
+    }else{
+      var authors_array = req.body.authors1;
+    }
+
+    if (data) {
+      data.updateAttributes({
+        book_name: req.body.book_name1,
+        authors: authors_array,
+        edition: req.body.edition1,
+        publisher: req.body.publisher1,
+        category: req.body.category1,
+        issuer: req.body.issuer1,
+        library_input_date: req.body.library_input_date1,
+        issue_date: req.body.issue_date1,
+        return_date: req.body.return_date1,
+        availability: req.body.availability1
+      })
+      .then(function(value){
+        Issue.create({
+          book_id: req.body.book_id1,
+          issuer: req.body.issuer1,
+          issue_date: req.body.issue_date1,
+          return_date: req.body.return_date1,
+          availability: req.body.availability1
+        }).then(data => {
+          res.redirect('/home');
+        }).catch((error) => res.status(400).send(error))
+      })
+    }
+  })
+});
+
+router.post('/returnbook', loggedincheck, function(req,res,next){
+  Books.findOne({ where: { book_id: req.body.returnissue_id } })
+  .then(function(data) {
+    if (data) {
+      data.updateAttributes({
+        issuer: req.body.returnedby,
+        return_date: req.body.returndate,
+        availability: true
+      })
+      .then(function(value){
+        Issue.create({
+          book_id: req.body.returnissue_id,
+          issuer: req.body.returnedby,
+          issue_date: req.body.issuedate,
+          return_date: req.body.returndate,
+          availability: true
+        }).then(data => {
+          res.redirect('/home');
+        }).catch((error) => res.status(400).send(error))
+      })
+    }
+  }).catch((error) => res.status(400).send(error))
+});
+
+router.post('/deletebook', loggedincheck, function(req,res,next){
+  Books.destroy({
+    where: {
+       book_id: req.body.delete_id
+    }
+  }).then(function(){
+    Issue.destroy({
+      where: {
+         book_id: req.body.delete_id
+      }
+    }).then(function(){
+      res.redirect('/home');
+    }).catch((error) => res.status(400).send(error))
+  }).catch((error) => res.status(400).send(error))
 
 });
 

@@ -47,7 +47,7 @@ router.post('/signup', function(req, res, next){
           },
           { where: { email: req.body.email } }
         )
-        .then((result) => res.status(200).send("Database updated!"))
+        .then((result) => res.redirect('/'))
         .catch((error) => res.status(400).send(error))
       }
       else{

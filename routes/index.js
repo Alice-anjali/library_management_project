@@ -43,7 +43,9 @@ router.get('/books', loggedincheck, function(req,res,next){
 });
 
 router.get('/user_home', loggedincheck, function(req,res,next){
-  res.render('user',{});
+  Books.findAll({}).then(function(booklist) {
+    res.render('user', {booklist : booklist});
+  })
 });
 
 router.post('/additem', loggedincheck, function(req,res,next){

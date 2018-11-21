@@ -12,7 +12,7 @@ router.post('/login', function(req, res, next) {
     if(user){
       console.log("Hie admin");
       req.session.user = 'library@place';
-      res.render('dashboard',{user: req.body.username1});
+      res.redirect('/home');
     }
     else{
       User.findOne({ where: {username: req.body.username1, password: req.body.password} }).then(function(user) {
@@ -20,7 +20,7 @@ router.post('/login', function(req, res, next) {
         if(user){
           console.log("Hie user");
           req.session.user = 'library@place';
-          res.render('user',{user: req.body.username1});
+          res.redirect('/user_home');
         }
         else{
           res.redirect('/');

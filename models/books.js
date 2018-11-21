@@ -1,18 +1,43 @@
-const Sequelize = require('sequelize');
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Books = sequelize.define('books',{
     book_id: {
-      type: Sequelize.INTEGER,
-      primaryKey: true
+      type: DataTypes.INTEGER
     },
-    book_name: Sequelize.STRING,
-    authors: Sequelize.ARRAY(Sequelize.STRING),
-    category: Sequelize.ENUM('ADMS', 'ICS', 'DC', 'ACC'),
-    issue_date: Sequelize.DATE,
-    return_date: Sequelize.DATE,
-    availability: Sequelize.BOOLEAN,
-    library_input_date: Sequelize.DATE
+    book_name: DataTypes.STRING,
+    authors: DataTypes.ARRAY(DataTypes.STRING),
+    edition: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    publisher:{
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    category: DataTypes.ENUM('ADBMS', 'ICS', 'DC', 'ACC'),
+    issuer:{
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    issue_date: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: DataTypes.NOW
+    },
+    return_date: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    availability: DataTypes.BOOLEAN,
+    library_input_date: DataTypes.DATE,
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    updatedAt:{
+      type: DataTypes.DATE,
+      allowNull: true
+    }
   });
 
   Books.assosiate = (models) => {};

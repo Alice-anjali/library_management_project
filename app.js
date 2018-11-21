@@ -11,6 +11,8 @@ var Admin = require('./models').Admin;
 
 var app = express();
 
+// models.sequelize.sync({force: true}).then(() => {});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');

@@ -21,55 +21,49 @@
         </nav>
       </div>
       <div class="row text-center">
-        <h3><b>Due Issues List</b></h3>
+        <h3><b>Due Books List</b></h3>
       </div>
       <div class="row" style="margin-top:3%;margin-left:1%;margin-right:1%;margin-bottom:2%">
         <table id="due_issue_table" class="display" width="100%">
           <thead>
-              <th>Company</th>
-              <th>Contact</th>
-              <th>Country</th>
+              <th>Book ID</th>
+              <th>Book Name</th>
+              <th>Authors</th>
+              <th>Edition</th>
+              <th>Publisher</th>
+              <th>Category</th>
+              <th>Issuer</th>
+              <th>Issue Date</th>
+              <th>Return Date</th>
+              <th>Availability</th>
+              <th></th>
+              <th></th>
           </thead>
           <tbody>
-          <tr>
-            <td>Alfreds Futterkiste</td>
-            <td>Maria Anders</td>
-            <td>Germany</td>
-          </tr>
-          <tr>
-            <td>Centro comercial Moctezuma</td>
-            <td>Francisco Chang</td>
-            <td>Mexico</td>
-          </tr>
-          <tr>
-            <td>Ernst Handel</td>
-            <td>Roland Mendel</td>
-            <td>Austria</td>
-          </tr>
-          <tr>
-            <td>Island Trading</td>
-            <td>Helen Bennett</td>
-            <td>UK</td>
-          </tr>
-          <tr>
-            <td>Laughing Bacchus Winecellars</td>
-            <td>Yoshi Tannamuri</td>
-            <td>Canada</td>
-          </tr>
-          <tr>
-            <td>Magazzini Alimentari Riuniti</td>
-            <td>Giovanni Rovelli</td>
-            <td>Italy</td>
-          </tr>
-        </tbody>
+            <% for(var i=0;i<due_books.length;i++){ %>
+            <tr>
+              <td><%= due_books[i].book_id %></td>
+              <td><%= due_books[i].book_name %></td>
+              <td><%= due_books[i].authors %></td>
+              <td><%= due_books[i].edition %></td>
+              <td><%= due_books[i].publisher %></td>
+              <td><%= due_books[i].category %></td>
+              <td><%= due_books[i].issuer %></td>
+              <td><%= due_books[i].issue_date %></td>
+              <td><%= due_books[i].return_date %></td>
+              <td><%= due_books[i].availability %></td>
+              
+            </tr>
+            <% } %>
+          </tbody>
         </table>
       </div>
       <div class="row text-center" style="margin-bottom:5%">
-        <button id="add_btn" class="btn btn-primary btn-lg">New Issue</button>
+        <button id="add_btn" onclick="addme()" class="btn btn-primary" data-toggle="modal" data-target="#newIssue">New Issue</button>
       </div>
 
       <div class="row text-center">
-        <h3><b>Returned Issues List</b></h3>
+        <h3><b>Returned Books List</b></h3>
       </div>
       <div class="row" style="margin-top:3%;margin-left:1%;margin-right:1%">
         <table id="returned_issue_table" class="display" width="100%">
@@ -113,6 +107,91 @@
         </table>
       </div>
 
+      <!-- Add Issue Modal -->
+      <div id="newIssue" class="modal fade">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title"><b>New Issue</b></h4>
+            </div>
+            <div class="modal-body">
+              <form action="/additem" method="post">
+                <table width="100%">
+                  <tr>
+                    <td style="float:right">Book ID:</td>
+                    <td><input type="text" name="book_id"></td>
+                    <td style="float:right">Book Name:</td>
+                    <td><input type="text" name="book_name"></td>
+                  </tr>
+                  <tr>
+                    <td><font color="#ffffff">""</font></td>
+                  </tr>
+                  <tr>
+                    <td style="float:right">Authors:</td>
+                    <td><input type="text" name="authors"></td>
+                    <td style="float:right">Edition:</td>
+                    <td><input type="text" name="edition"></td>
+                  </tr>
+                  <tr>
+                    <td><font color="#ffffff">""</font></td>
+                  </tr>
+                  <tr>
+                    <td style="float:right">Publisher:</td>
+                    <td><input type="text" name="publisher"></td>
+                    <td style="float:right">Category:</td>
+                    <td><label>
+                          <select name="category">
+                            <option selected>--Select--</option>
+                            <option>ADBMS</option>
+                            <option>ICS</option>
+                            <option>DC</option>
+                            <option>ACC</option>
+                          </select>
+                        </label>
+                      </td>
+                  </tr>
+                  <tr>
+                    <td><font color="#ffffff">""</font></td>
+                  </tr>
+                  <tr>
+                    <td style="float:right">Issuer:</td>
+                    <td><input type="text" name="issuer"></td>
+                    <td style="float:right">Library Entry Date:</td>
+                    <td><input type="date" id="library_input_date" name="library_input_date"></td>
+                  </tr>
+                  <tr>
+                    <td><font color="#ffffff">""</font></td>
+                  </tr>
+                  <tr>
+                    <td style="float:right">Issue Date:</td>
+                    <td><input type="date" id="issue_date" name="issue_date"></td>
+                    <td style="float:right">Return Date:</td>
+                    <td><input type="date" id="return_date" name="return_date"></td>
+                  </tr>
+                  <tr>
+                    <td><font color="#ffffff">""</font></td>
+                  </tr>
+                  <tr>
+                    <td style="float:right">Availability:</td>
+                    <td><label>
+                          <select name="availability">
+                            <option selected>true</option>
+                            <option>false</option>
+                          </select>
+                        </label></td>
+                    <td><input type="hidden" id="hidden_date" name="hidden_date"></td>
+                  </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Add</button>
+            </form>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
    </div>
   </body>
   <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
@@ -127,5 +206,18 @@
     $(document).ready(function(){
       $('#returned_issue_table').DataTable();
     });
+
+    $('#newIssue').modal('show');
+
+    function addme(){
+      var d = new Date();
+      var n = d.toISOString();
+      var idate = n.substring(0,10);
+      // console.log("date = "+ new Date(idate));
+      document.getElementById('issue_date').value = idate;
+      document.getElementById('return_date').value = idate;
+      document.getElementById('hidden_date').value = d;
+    }
+
   </script>
 </html>
